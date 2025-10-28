@@ -1,5 +1,5 @@
 name: Multi-platform build test
-on: push
+on: workflow_dispatch:
 
 jobs:
   ubuntu-build:
