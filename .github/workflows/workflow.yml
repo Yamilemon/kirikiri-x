@@ -1,6 +1,11 @@
 name: Multi-platform build test
-on: 
+
+on:
   workflow_dispatch:
+
+  workflow_run:
+    workflows: ["Code Format Check"]
+    types: [ "completed" ]
 
 jobs:
   ubuntu-build:
