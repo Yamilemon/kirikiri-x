@@ -3,21 +3,21 @@
 
 class WindowsFileSystem: public LibRuntime::Interfaces::IFileSystem {
 public:
-    size_t get_current_directory(tjs_char *result) override;
-    bool set_current_directory(const tjs_char *path) override;
+    size_t get_current_directory(ttstr &result) override;
+    bool set_current_directory(const ttstr &path) override;
 
-    tTJSBinaryStream *open(const tjs_char *path, tjs_uint32 flags) override;
+    tTJSBinaryStream *open(const ttstr &path, tjs_uint32 flags) override;
 
-    bool file_exists(const tjs_char *path) override;
-    bool directory_exists(const tjs_char *path) override;
+    bool file_exists(const ttstr &path) override;
+    bool directory_exists(const ttstr &path) override;
 
     tjs_int get_maxpath_length() override;
-    bool get_home_directory(tjs_string &result) override;
-    bool get_appdata_directory(tjs_string &result) override;
-    bool get_savedata_directory(tjs_string &result) override;
+    bool get_home_directory(ttstr &result) override;
+    bool get_appdata_directory(ttstr &result) override;
+    bool get_savedata_directory(ttstr &result) override;
 
-    bool path_combine(const tjs_string &path1, const tjs_string &path2, tjs_string &result) override;
+    bool path_combine(const ttstr &path1, const ttstr &path2, ttstr &result) override;
 
-    LibRuntime::Storage::UnifiedStoragePath get_unified_storage_path(const tjs_string &path) override;
-    tjs_string get_filesystem_path(const LibRuntime::Storage::UnifiedStoragePath &path) override;
+    LibRuntime::Storage::UnifiedStoragePath get_unified_storage_path(const ttstr &path) override;
+    ttstr get_filesystem_path(const LibRuntime::Storage::UnifiedStoragePath &path) override;
 };
