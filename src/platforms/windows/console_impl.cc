@@ -1,20 +1,26 @@
 #include "console_impl.h"
 
-void WindowsConsole::write(const tjs_char *text) {
-    int mbsize = WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)text, -1, NULL, 0, NULL, NULL);
+void WindowsConsole::write(const ttstr &text) {
+    const auto *wtext = reinterpret_cast<LPCWSTR>(text.c_str());
+    int mbsize = WideCharToMultiByte(CP_UTF8, 0, wtext, -1, nullptr, 0, nullptr, nullptr);
+
     auto mbstr = new char[mbsize];
-    WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)text, -1, mbstr, mbsize, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, wtext, -1, mbstr, mbsize, nullptr, nullptr);
     std::cout << mbstr;
+    delete[] mbstr;
 }
 
-void WindowsConsole::error(const tjs_char *text) {
-    int mbsize = WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)text, -1, nullptr, 0, NULL, NULL);
+void WindowsConsole::error(const ttstr &text) {
+    const auto *wtext = reinterpret_cast<LPCWSTR>(text.c_str());
+    int mbsize = WideCharToMultiByte(CP_UTF8, 0, wtext, -1, nullptr, 0, nullptr, nullptr);
+
     auto mbstr = new char[mbsize];
-    WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)text, -1, mbstr, mbsize, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, wtext, -1, mbstr, mbsize, nullptr, nullptr);
     std::cerr << mbstr;
+    delete[] mbstr;
 }
 
-size_t WindowsConsole::readline(tjs_string &result) {
+size_t WindowsConsole::readline(ttstr &result) {
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
     std::wstring readresult;
     const size_t CHUNK_SIZE = 1024;
@@ -43,13 +49,7 @@ size_t WindowsConsole::readline(tjs_string &result) {
         }
     }
 
-#ifdef _MSC_VER
-    result = readresult;
+    result = reinterpret_cast<const tjs_char *>(readresult.c_str());
     return result.length();
-#else
-    std::u16string res((const char16_t*)readresult.c_str());
-    result = res;
-    return result.length();
-#endif
 }
 
